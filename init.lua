@@ -1,14 +1,14 @@
-cb = {}
+local cb = {
+	static = "conveyor_belt_belt_1.png",
+	anim_top = {name="conveyor_belt_belt_anim_back.png", animation={type="vertical_frames", aspect_w = 16, aspect_h=16, length=1}},
+	anim_front = {name="conveyor_belt_belt_anim_front.png", animation={type="vertical_frames", aspect_w = 16, aspect_h=16, length=1}},
+	anim_bottom = {name="conveyor_belt_belt_anim_back.png", animation={type="vertical_frames", aspect_w = 16, aspect_h=16, length=1}},
+	anim_back = {name="conveyor_belt_belt_anim_back.png", animation={type="vertical_frames", aspect_w = 16, aspect_h=16, length=1}},
+	side = "conveyor_belt_side.png",
 
-cb.static = "conveyor_belt_belt_1.png"
-cb.anim_top = {name="conveyor_belt_belt_anim_back.png", animation={type="vertical_frames", aspect_w = 16, aspect_h=16, length=1}}
-cb.anim_front = {name="conveyor_belt_belt_anim_front.png", animation={type="vertical_frames", aspect_w = 16, aspect_h=16, length=1}}
-cb.anim_bottom = {name="conveyor_belt_belt_anim_back.png", animation={type="vertical_frames", aspect_w = 16, aspect_h=16, length=1}}
-cb.anim_back = {name="conveyor_belt_belt_anim_back.png", animation={type="vertical_frames", aspect_w = 16, aspect_h=16, length=1}}
-cb.side = "conveyor_belt_side.png"
-
-cb.interval = 0.01
-cb.speed = 0.25
+	interval = 0.01,
+	speed = 0.25,
+}
 
 minetest.register_node("conveyor_belt:coveyor_belt_on",{
 	description = "Conveyor Belt (on)",
@@ -22,9 +22,9 @@ minetest.register_node("conveyor_belt:coveyor_belt_on",{
 		local node = minetest.get_node(pos)
 		local objects = minetest.get_objects_inside_radius({x=pos.x, y=pos.y+1, z=pos.z}, 1)
 		for i=1,#objects do
-			local opos = objects[i]:getpos()
 			local v = objects[i]:getvelocity()
-			if v ~= nil then
+			if v then
+				local opos = objects[i]:getpos()
 				local facedir = node.param2
 				if(facedir == 0) then		-- z+
 					if v.z < cb.speed then v.z = cb.speed end
@@ -37,7 +37,7 @@ minetest.register_node("conveyor_belt:coveyor_belt_on",{
 				else
 					print(tostring(facedir))
 				end
-				objects[i]:setvelocity({x=v.x, y=v.y, z=v.z})
+				objects[i]:setvelocity(v)
 			end
 		end
 		minetest.get_node_timer(pos):set(cb.interval, elapsed)
