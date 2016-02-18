@@ -19,13 +19,11 @@ minetest.register_node("conveyor_belt:coveyor_belt_on",{
 
 	-- TODO: sounds = ...,
 	on_timer = function(pos, elapsed)
-		local node = minetest.get_node(pos)
+		local facedir = minetest.get_node(pos).param2
 		local objects = minetest.get_objects_inside_radius({x=pos.x, y=pos.y+1, z=pos.z}, 1)
 		for i=1,#objects do
 			local v = objects[i]:getvelocity()
 			if v then
-				local opos = objects[i]:getpos()
-				local facedir = node.param2
 				if(facedir == 0) then		-- z+
 					if v.z < cb.speed then v.z = cb.speed end
 				elseif(facedir == 2) then	-- z-
